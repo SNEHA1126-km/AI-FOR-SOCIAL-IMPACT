@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Wellness Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <h1>Student Wellness Dashboard</h1>
+        <p class="tag">Mood detection, progress and personalised breaks</p>
+    </header>
+
+    <main class="main">
+        <section class="left">
+            <div class="video-wrap">
+                <video id="video" autoplay muted playsinline></video>
+                <canvas id="overlay" class="overlay"></canvas>
+            </div>
+            <div class="controls">
+                <button id="toggleCamera">Start Camera</button>
+                <button id="toggleOverlay" class="secondary">Hide Overlays</button>
+                <span id="loading">Models: not loaded</span>
+                <span id="status"></span>
+            </div>
+            <div class="manual">
+                <p>Manual mood entry (fallback):</p>
+                <div class="mood-buttons" id="manualButtons">
+                    <button data-label="Happy">😄 Happy</button>
+                    <button data-label="Neutral">😐 Neutral</button>
+                    <button data-label="Sad">😢 Sad</button>
+                    <button data-label="Stressed">😣 Stressed</button>
+                </div>
+            </div>
+
+            <div class="chatbot-card">
+                <div class="chatbot-header">
+                    <h2>Mental Wellness Chat</h2>
+                    <p class="chatbot-subtitle">Talk to your supportive companion below.</p>
+                </div>
+                <div class="chatbot-messages" id="chatMessages" aria-live="polite"></div>
+                <form id="chatForm" class="chatbot-input">
+                    <textarea id="chatInput" rows="3" placeholder="Share how you feel or ask for support..."></textarea>
+                    <button type="submit" id="chatSend">Send</button>
+                </form>
+            </div>
+        </section>
+
+        <aside class="right">
+            <div class="card" id="loginCard">
+                <h2>Login Portal</h2>
+                <div id="loginForm">
+                    <label>Username</label>
+                    <input id="loginUser" type="text" placeholder="Your name">
+                    <label>Password</label>
+                    <input id="loginPass" type="password" placeholder="(any for demo)">
+                    <div style="margin-top:8px">
+                        <button id="loginBtn">Sign In</button>
+                        <button id="logoutBtn" class="secondary" style="display:none">Sign Out</button>
+                    </div>
+                    <div id="loginMsg" style="margin-top:8px;color:var(--muted)"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Current Emotion</h2>
+                <div class="current">
+                    <div id="mood-emoji" class="emoji">😐</div>
+                    <div id="mood-display" class="mood">--</div>
+                </div>
+                <div class="conf">
+                    <div>Happy: <span id="conf-happy">--%</span></div>
+                    <div>Sad: <span id="conf-sad">--%</span></div>
+                    <div>Neutral: <span id="conf-neutral">--%</span></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Attention Diagnostics</h2>
+                <div>EAR: <span id="diag-ear">--</span></div>
+                <div>Eyes closed (s): <span id="diag-closed">0.0</span></div>
+                <div>Deviation: <span id="diag-deviation">--</span></div>
+                <div>Status: <span id="diag-status">Attentive</span></div>
+            </div>
+
+            <div class="card">
+                <h2>Emotion History</h2>
+                <canvas id="emotionChart"></canvas>
+            </div>
+
+            <div class="card">
+                <h2>Progress & Wellness</h2>
+                <div>Entries: <span id="stat-entries">0</span></div>
+                <div>Avg score: <span id="stat-avg">--</span></div>
+                <div>No-attention events: <span id="stat-noattention">--</span></div>
+                <canvas id="progressChart" style="margin-top:8px"></canvas>
+            </div>
+
+            <div class="card">
+                <h2>Study Break Planner</h2>
+                <div>Recommended break: <strong id="break-reco">--</strong></div>
+                <div id="break-pref-display" style="margin:8px 0;color:var(--muted)">Preferred break: <strong id="break-pref">--</strong></div>
+                <div style="margin-top:8px">
+                    <label>Custom duration (min)</label>
+                    <input id="break-duration" type="number" min="1" value="5">
+                    <button id="save-break-pref" class="secondary">Save Preference</button>
+                </div>
+                <div class="break-presets" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+                    <button type="button" data-min="5">5 min</button>
+                    <button type="button" data-min="10">10 min</button>
+                    <button type="button" data-min="15">15 min</button>
+                    <button type="button" data-min="20">20 min</button>
+                </div>
+                <div style="margin-top:12px">
+                    <button id="start-break">Start Break</button>
+                </div>
+                <div id="break-status" style="margin-top:8px;color:var(--muted)"></div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="footer">Data stored locally in your browser (localStorage).</footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
